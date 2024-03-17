@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Substrate.AjunaSolo.NET.NetApiExt\Substrate.AjunaSolo.NET.NetApiExt.csproj" />
+    <ProjectReference Include="..\Substrate.Integration\Substrate.Integration.csproj" />
   </ItemGroup>
 
 </Project>
