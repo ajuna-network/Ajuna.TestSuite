@@ -37,7 +37,7 @@ namespace Ajuna.TestSuite
         {
             var result = await _substrateClient.System.ChainAsync(CancellationToken.None);
 
-            Assert.AreEqual("Ajuna Dev Testnet", result);
+            Assert.AreEqual("UNIQUE", result);
         }
 
         [Test]
@@ -45,9 +45,9 @@ namespace Ajuna.TestSuite
         {
             var result = await _substrateClient.System.PropertiesAsync(CancellationToken.None);
 
-            Assert.AreEqual(42, result.Ss58Format);
-            Assert.AreEqual(12, result.TokenDecimals);
-            Assert.AreEqual("AJUN", result.TokenSymbol);
+            Assert.AreEqual(7391, result.Ss58Format);
+            Assert.AreEqual(18, result.TokenDecimals);
+            Assert.AreEqual("UNQ", result.TokenSymbol);
         }
     }
 }
