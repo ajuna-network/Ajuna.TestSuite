@@ -1,4 +1,5 @@
 ﻿using Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_awesome_avatars.types.config;
+using Substrate.NetApi.Model.Types.Primitive;
 using Substrate.NetApi.Modules;
 
 namespace Substrate.Integration.Model
@@ -17,6 +18,33 @@ namespace Substrate.Integration.Model
             Open = mint.Open.Value;
             Cooldown = mint.Cooldown.Value;
             FreeMintFeeMultiplier = mint.FreeMintFeeMultiplier.Value;
+        }
+
+        /// <summary>
+        /// Mint Config Constructor
+        /// </summary>
+        /// <param name="open"></param>
+        /// <param name="cooldown"></param>
+        /// <param name="freeMintFeeMultiplier"></param>
+        public MintConfigSharp(bool open, uint cooldown, ushort freeMintFeeMultiplier)
+        {
+            Open = open;
+            Cooldown = cooldown;
+            FreeMintFeeMultiplier = freeMintFeeMultiplier;
+        }
+
+        /// <summary>
+        /// Convert to Substrate
+        /// </summary>
+        /// <returns></returns>
+        public MintConfig ToSubstrate()
+        {
+            return new MintConfig
+            {
+                Open = new Bool(Open),
+                Cooldown = new U32(Cooldown),
+                FreeMintFeeMultiplier = new U16(FreeMintFeeMultiplier)
+            };
         }
 
         /// <summary>

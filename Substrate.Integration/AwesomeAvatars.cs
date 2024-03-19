@@ -870,9 +870,10 @@ namespace Substrate.Integration
         /// </summary>
         /// <param name="organizer"></param>
         /// <param name="newGlobalConfig"></param>
+        /// <param name="concurrentTasks"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task<string?> UpdateGlobalConfigAsync(Account organizer, GlobalConfig newGlobalConfig, CancellationToken token)
+        public async Task<string?> UpdateGlobalConfigAsync(Account organizer, GlobalConfig newGlobalConfig, int concurrentTasks, CancellationToken token)
         {
             var extrinsicType = "UpdateGlobalConfig";
 
@@ -883,7 +884,7 @@ namespace Substrate.Integration
 
             var extrinsic = AwesomeAvatarsCalls.UpdateGlobalConfig(newGlobalConfig);
 
-            return await GenericExtrinsicAsync(organizer, extrinsicType, extrinsic, 1, token);
+            return await GenericExtrinsicAsync(organizer, extrinsicType, extrinsic, concurrentTasks, token);
         }
 
         /// <summary>

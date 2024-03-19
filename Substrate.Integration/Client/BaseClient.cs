@@ -221,28 +221,35 @@ namespace Substrate.Integration.Client
         /// <param name="extrinsicUpdate"></param>
         public async void ActionExtrinsicUpdate(string subscriptionId, TransactionEventInfo extrinsicUpdate)
         {
-            ExtrinsicManager.UpdateExtrinsicInfo(subscriptionId, extrinsicUpdate);
-
-            // proccessing events scrapping
-            if (ExtrinsicManager.TryGet(subscriptionId, out ExtrinsicInfo queueInfo) && !queueInfo.HasEvents && extrinsicUpdate.Hash != null && extrinsicUpdate.Index != null)
+            try
             {
-                string parameters = SystemStorage.EventsParams();
-                
-                var events = await SubstrateClient.GetStorageAsync<BaseVec<EventRecord>>(parameters, extrinsicUpdate.Hash.Value, CancellationToken.None);
-                if (events == null)
-                {
-                    ExtrinsicManager.UpdateExtrinsicError(subscriptionId, "No block events");
-                    return;
-                }
+                ExtrinsicManager.UpdateExtrinsicInfo(subscriptionId, extrinsicUpdate);
 
-                var allExtrinsicEvents = events.Value.Where(p => p.Phase.Value == Phase.ApplyExtrinsic && ((U32)p.Phase.Value2).Value == extrinsicUpdate.Index);
-                if (!allExtrinsicEvents.Any())
+                // proccessing events scrapping
+                if (ExtrinsicManager.TryGet(subscriptionId, out ExtrinsicInfo queueInfo) && !queueInfo.HasEvents && extrinsicUpdate.Hash != null && extrinsicUpdate.Index != null)
                 {
-                    ExtrinsicManager.UpdateExtrinsicError(subscriptionId, "No extrinsic events");
-                    return;
+                    string parameters = SystemStorage.EventsParams();
+
+                    var events = await SubstrateClient.GetStorageAsync<BaseVec<EventRecord>>(parameters, extrinsicUpdate.Hash.Value, CancellationToken.None);
+                    if (events == null)
+                    {
+                        ExtrinsicManager.UpdateExtrinsicError(subscriptionId, "No block events");
+                        return;
+                    }
+
+                    var allExtrinsicEvents = events.Value.Where(p => p.Phase.Value == Phase.ApplyExtrinsic && ((U32)p.Phase.Value2).Value == extrinsicUpdate.Index);
+                    if (!allExtrinsicEvents.Any())
+                    {
+                        ExtrinsicManager.UpdateExtrinsicError(subscriptionId, "No extrinsic events");
+                        return;
+                    }
+
+                    ExtrinsicManager.UpdateExtrinsicEvents(subscriptionId, allExtrinsicEvents);
                 }
-                
-                ExtrinsicManager.UpdateExtrinsicEvents(subscriptionId, allExtrinsicEvents);
+            }
+            catch (Exception ex)
+            {
+                Log.Warning("ActionExtrinsicUpdate: {0}", ex.Message);
             }
         }
 

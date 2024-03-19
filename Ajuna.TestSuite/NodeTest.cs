@@ -8,7 +8,7 @@ namespace Substrate.NetApi.TestNode
 {
     public abstract class NodeTest
     {
-        protected const string WebSocketUrl = "ws://127.0.0.1:33155";
+        protected const string WebSocketUrl = "ws://127.0.0.1:42181";
 
         protected SubstrateNetwork _client;
 
@@ -29,8 +29,12 @@ namespace Substrate.NetApi.TestNode
         public MiniSecret MiniSecretBob => new MiniSecret(Utils.HexToByteArray("0x398f0c28f98885e046333d4a41c19cee4c37368a9832c6502f6cfd182e2aef89"), ExpandMode.Ed25519);
         public Account Bob => Account.Build(KeyType.Sr25519, MiniSecretBob.ExpandToSecret().ToEd25519Bytes(), MiniSecretBob.GetPair().Public.Key);
 
-        public MiniSecret MiniSecretPlayer => new MiniSecret(Utils.HexToByteArray("0x0a52c9148e690566d64e080ffafdda6111d3404ee122d7caf5dd7d25573b07f5"), ExpandMode.Ed25519);
-        public Account Player => Account.Build(KeyType.Sr25519, MiniSecretPlayer.ExpandToSecret().ToEd25519Bytes(), MiniSecretPlayer.GetPair().Public.Key);
+        public MiniSecret MiniSecretPlayer1 => new MiniSecret(Utils.HexToByteArray("0x0a52c9148e690566d64e080ffafdda6111d3404ee122d7caf5dd7d25573b07f5"), ExpandMode.Ed25519);
+        public Account Player1 => Account.Build(KeyType.Sr25519, MiniSecretPlayer1.ExpandToSecret().ToEd25519Bytes(), MiniSecretPlayer1.GetPair().Public.Key);
+
+        public MiniSecret MiniSecretPlayer2 => new MiniSecret(Utils.HexToByteArray("0xa07e56ddadf45a99b71861c0e42493b254a53f9ffcdaec81de423bbd178becae"), ExpandMode.Ed25519);
+        public Account Player2 => Account.Build(KeyType.Sr25519, MiniSecretPlayer2.ExpandToSecret().ToEd25519Bytes(), MiniSecretPlayer2.GetPair().Public.Key);
+
 
         [SetUp]
         public async Task ConnectAsync()

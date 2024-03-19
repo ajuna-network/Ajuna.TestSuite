@@ -1,4 +1,5 @@
 ﻿using Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_awesome_avatars.types.config;
+using Substrate.NetApi.Model.Types.Primitive;
 using System.Numerics;
 
 namespace Substrate.Integration.Model
@@ -19,6 +20,42 @@ namespace Substrate.Integration.Model
             EnabledInBuy = affiliateConfig.EnabledInBuy.Value;
             EnabledInUpgrade = affiliateConfig.EnabledInUpgrade.Value;
             AffiliatorEnableFee = affiliateConfig.AffiliatorEnableFee.Value;
+        }
+
+        /// <summary>
+        /// Affiliate Config Constructor
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <param name="enabledInMint"></param>
+        /// <param name="enabledInBuy"></param>
+        /// <param name="enabledInUpgrade"></param>
+        /// <param name="affiliatorEnableFee"></param>
+        public AffiliateConfigSharp(AffiliateMode mode, bool enabledInMint, bool enabledInBuy, bool enabledInUpgrade, BigInteger affiliatorEnableFee)
+        {
+            Mode = mode;
+            EnabledInMint = enabledInMint;
+            EnabledInBuy = enabledInBuy;
+            EnabledInUpgrade = enabledInUpgrade;
+            AffiliatorEnableFee = affiliatorEnableFee;
+        }
+
+        /// <summary>
+        /// Convert to Substrate
+        /// </summary>
+        /// <returns></returns>
+        public AffiliateConfig ToSubstrate()
+        {
+            var mode = new EnumAffiliateMode();
+            mode.Create(Mode);
+
+            return new AffiliateConfig
+            {
+                Mode = mode,
+                EnabledInMint = new Bool(EnabledInMint),
+                EnabledInBuy = new Bool(EnabledInBuy),
+                EnabledInUpgrade = new Bool(EnabledInUpgrade),
+                AffiliatorEnableFee = new U128(AffiliatorEnableFee)
+            };
         }
 
         /// <summary>

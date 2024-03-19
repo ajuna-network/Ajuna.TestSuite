@@ -23,6 +23,45 @@ namespace Substrate.Integration.Model
         }
 
         /// <summary>
+        /// Global Config Constructor
+        /// </summary>
+        /// <param name="mint"></param>
+        /// <param name="forge"></param>
+        /// <param name="avatarTransfer"></param>
+        /// <param name="freemintTransfer"></param>
+        /// <param name="trade"></param>
+        /// <param name="nftTransfer"></param>
+        /// <param name="affiliateConfig"></param>
+        public GlobalConfigSharp(MintConfigSharp mint, ForgeConfigSharp forge, AvatarTransferConfigSharp avatarTransfer, FreemintTransferConfigSharp freemintTransfer, TradeConfigSharp trade, NftTransferConfigSharp nftTransfer, AffiliateConfigSharp affiliateConfig)
+        {
+            Mint = mint;
+            Forge = forge;
+            AvatarTransfer = avatarTransfer;
+            FreemintTransfer = freemintTransfer;
+            Trade = trade;
+            NftTransfer = nftTransfer;
+            AffiliateConfig = affiliateConfig;
+        }
+
+        /// <summary>
+        /// Convert to Substrate
+        /// </summary>
+        /// <returns></returns>
+        public GlobalConfig ToSubstrate()
+        {
+            return new GlobalConfig
+            {
+                Mint = Mint.ToSubstrate(),
+                Forge = Forge.ToSubstrate(),
+                AvatarTransfer = AvatarTransfer.ToSubstrate(),
+                FreemintTransfer = FreemintTransfer.ToSubstrate(),
+                Trade = Trade.ToSubstrate(),
+                NftTransfer = NftTransfer.ToSubstrate(),
+                AffiliateConfig = AffiliateConfig.ToSubstrate()
+            };
+        }
+
+        /// <summary>
         /// Mint
         /// </summary>
         public MintConfigSharp Mint { get; }

@@ -119,7 +119,7 @@ namespace Substrate.Integration.Client
             systemExtrinsicEvent = null;
             errorMsg = null;
 
-            if (!AllEvents(RuntimeEvent.System, out IEnumerable<EnumEvent> allEnumEvents))
+            if (!AllEvents(RuntimeEvent.System, out IEnumerable<EnumEvent>? allEnumEvents))
             {
                 return false;
             }
@@ -160,19 +160,19 @@ namespace Substrate.Integration.Client
             {
                 case DispatchError.Module:
                     var moduleError = (ModuleError)dispatchError.Value2;
-                    return dispatchError.Value.ToString() + $"[{(RuntimeEvent)moduleError.Index.Value}{moduleError.Index.Value}][{Utils.Bytes2HexString(moduleError.Error.Value.ToBytes())}]";
+                    return $"{dispatchError.Value};{(RuntimeEvent)moduleError.Index.Value};{moduleError.Index.Value};{Utils.Bytes2HexString(moduleError.Error.Value.ToBytes())}";
 
                 case DispatchError.Token:
                     var enumTokenError = (EnumTokenError)dispatchError.Value2;
-                    return dispatchError.Value.ToString() + $"[{enumTokenError.Value}]";
+                    return $"{dispatchError.Value};{enumTokenError.Value}";
 
                 case DispatchError.Arithmetic:
                     var enumArithmeticError = (EnumArithmeticError)dispatchError.Value2;
-                    return dispatchError.Value.ToString() + $"[{enumArithmeticError.Value}]";
+                    return $"{dispatchError.Value};{enumArithmeticError.Value}";
 
                 case DispatchError.Transactional:
                     var enumTransactionalError = (EnumTransactionalError)dispatchError.Value2;
-                    return dispatchError.Value.ToString() + $"[{enumTransactionalError.Value}]";
+                    return $"{dispatchError.Value};{enumTransactionalError.Value}";
 
                 default:
                     return dispatchError.Value.ToString();
