@@ -158,7 +158,7 @@ namespace Substrate.Integration.Client
         /// <param name="concurrentTasks"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        internal async Task<string> GenericExtrinsicAsync(Account account, string extrinsicType, Method extrinsicMethod, int concurrentTasks, CancellationToken token)
+        public async Task<string> GenericExtrinsicAsync(Account account, string extrinsicType, Method extrinsicMethod, int concurrentTasks, CancellationToken token)
         {
             if (account == null)
             {

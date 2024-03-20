@@ -1,14 +1,16 @@
-﻿using Substrate.Integration;
+﻿using Substrate.Bajun.NET.NetApiExt.Generated.Storage;
+using Substrate.Integration;
 using Substrate.Integration.Client;
 using Substrate.NET.Schnorrkel.Keys;
 using Substrate.NetApi.Model.Extrinsics;
 using Substrate.NetApi.Model.Types;
+using System.Threading;
 
 namespace Substrate.NetApi.TestNode
 {
     public abstract class NodeTest
     {
-        protected const string WebSocketUrl = "ws://127.0.0.1:42181";
+        protected const string WebSocketUrl = "ws://127.0.0.1:35579";
 
         protected SubstrateNetwork _client;
 
@@ -72,6 +74,73 @@ namespace Substrate.NetApi.TestNode
             var blockNumber = new Model.Types.Base.BlockNumber();
             blockNumber.Create((uint)(lastBlockNumber - 20));
             return (await _client.SubstrateClient.Chain.GetBlockHashAsync(blockNumber)).Bytes;
+        }
+
+        /// <summary>
+        /// Execute a transaction and wait for the result
+        /// </summary>
+        /// <typeparam name="TOption"></typeparam>
+        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="account"></param>
+        /// <param name="option"></param>
+        /// <param name="transactionFunction"></param>
+        /// <param name="avatarsErrors"></param>
+        /// <param name="timeoutDuration"></param>
+        /// <returns></returns>
+        public async Task<(bool, ExtrinsicInfo)> ExecuteTransactionTestAsync<TEnum>(
+            Account account,
+            Method method,
+            TEnum? avatarsErrors,
+            TimeSpan timeoutDuration) where TEnum : struct, Enum
+        {
+            var tcs = new TaskCompletionSource<(bool, ExtrinsicInfo)>();
+            var subscriptionId = "";
+
+            void OnExtrinsicUpdated(string subId, ExtrinsicInfo extrinsicInfo)
+            {
+                if (subId == subscriptionId && (extrinsicInfo.HasEvents || extrinsicInfo.Error != null))
+                {
+                    tcs.SetResult((true, extrinsicInfo));
+                }
+            }
+
+            _client.ExtrinsicManager.ExtrinsicUpdated += OnExtrinsicUpdated;
+            subscriptionId = await _client.GenericExtrinsicAsync(account, method.ModuleName + "." + method.CallName, method, 100, CancellationToken.None);
+            Assert.That(subscriptionId, Is.Not.Null);
+
+            var finished = await Task.WhenAny(tcs.Task, Task.Delay(timeoutDuration));
+            _client.ExtrinsicManager.ExtrinsicUpdated -= OnExtrinsicUpdated;
+
+            Assert.That(finished, Is.EqualTo(tcs.Task), "Test timed out waiting for final callback");
+            var taskResult = await tcs.Task;
+
+            Assert.That(taskResult.Item1, Is.True);
+
+            Assert.That(taskResult.Item2.SystemExtrinsicEvent(out var systemExtrinsicEvent, out var errorMsg), Is.True);
+            Assert.That(systemExtrinsicEvent, Is.Not.Null);
+
+            if (avatarsErrors.HasValue)
+            {
+                Assert.That(systemExtrinsicEvent, Is.EqualTo(Substrate.Bajun.NET.NetApiExt.Generated.Model.frame_system.pallet.Event.ExtrinsicFailed));
+                Assert.That(errorMsg, Is.Not.Null);
+                var errorArray = errorMsg.Split(";");
+                if (errorArray.Length < 4)
+                {
+                    Assert.That(errorArray.Contains(avatarsErrors.ToString()), Is.True);
+                }
+                else
+                {
+                    var errorValue = (TEnum)Enum.ToObject(typeof(TEnum), BitConverter.ToUInt32(Utils.HexToByteArray(errorArray[3]), 0));
+                    Assert.That(errorValue, Is.EqualTo(avatarsErrors.Value));
+                }
+            }
+            else
+            {
+                Assert.That(systemExtrinsicEvent, Is.EqualTo(Substrate.Bajun.NET.NetApiExt.Generated.Model.frame_system.pallet.Event.ExtrinsicSuccess));
+                Assert.That(errorMsg, Is.Null);
+            }
+
+            return taskResult;
         }
     }
 }
