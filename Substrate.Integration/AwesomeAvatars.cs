@@ -658,46 +658,48 @@ namespace Substrate.Integration
         }
 
         /// <summary>
-        /// Set the price
+        /// Set price
         /// </summary>
+        /// <param name="account"></param>
         /// <param name="avatarId"></param>
         /// <param name="price"></param>
         /// <param name="concurrentTasks"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task<string?> SetPriceAsync(H256 avatarId, BaseCom<U128> price, int concurrentTasks, CancellationToken token)
+        public async Task<string?> SetPriceAsync(Account account, H256 avatarId, BaseCom<U128> price, int concurrentTasks, CancellationToken token)
         {
             var extrinsicType = "SetPrice";
 
-            if (!IsConnected || Account == null)
+            if (!IsConnected || account == null)
             {
                 return null;
             }
 
             var extrinsic = AwesomeAvatarsCalls.SetPrice(avatarId, price);
 
-            return await GenericExtrinsicAsync(Account, extrinsicType, extrinsic, concurrentTasks, token);
+            return await GenericExtrinsicAsync(account, extrinsicType, extrinsic, concurrentTasks, token);
         }
 
         /// <summary>
-        /// Remove the price
+        /// Remove price
         /// </summary>
+        /// <param name="account"></param>
         /// <param name="avatarId"></param>
         /// <param name="concurrentTasks"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task<string?> RemovePriceAsync(H256 avatarId, int concurrentTasks, CancellationToken token)
+        public async Task<string?> RemovePriceAsync(Account account, H256 avatarId, int concurrentTasks, CancellationToken token)
         {
             var extrinsicType = "RemovePrice";
 
-            if (!IsConnected || Account == null)
+            if (!IsConnected || account == null)
             {
                 return null;
             }
 
             var extrinsic = AwesomeAvatarsCalls.RemovePrice(avatarId);
 
-            return await GenericExtrinsicAsync(Account, extrinsicType, extrinsic, concurrentTasks, token);
+            return await GenericExtrinsicAsync(account, extrinsicType, extrinsic, concurrentTasks, token);
         }
 
         /// <summary>

@@ -68,7 +68,7 @@ namespace Ajuna.TestSuite
             var enumCalls = new List<EnumRuntimeCall>
             {
                 PalletBalances.BalancesTransferKeepAlive(_player1.ToAccountId32(), 5 * SubstrateNetwork.DECIMALS),
-                PalletAwesomeAvatars.SetFreeMints(_player1.ToAccountId32(), 100),
+                PalletAwesomeAvatars.SetFreeMints(_player1.ToAccountId32(), 500),
             };
 
             var subscriptionId = await _client.BatchAllAsync(_organizer, enumCalls, 2, CancellationToken.None);
@@ -182,8 +182,8 @@ namespace Ajuna.TestSuite
                     1,
                     36900000000000,
                     20000000000000,
-                    50000000000000,
-                    90000000000000),
+                    setPriceUnlock: 50 * SubstrateNetwork.DECIMALS,
+                    avatarTransferUnlock: 90 * SubstrateNetwork.DECIMALS),
                 LogicGeneration.First,
                 LogicGeneration.First);
             var season = seasonSharp.ToSubstrate();
@@ -473,16 +473,31 @@ namespace Ajuna.TestSuite
             Assert.That((await SetPriceAsync(_player1,
                 avatars[0], new BigInteger(5 * SubstrateNetwork.DECIMALS), AwesomeAvatarsErrors.FeatureLocked)).IsSuccess, Is.True);
 
-        }
-
-        [Test, Order(14)]
-        public async Task FullTradeConfig1TestAsync()
-        {
-            var avatars = await GetAvatarIdsAsync(_player1);
+            var accountDataSharp = await _client.GetAccountAsync(_player1, null, CancellationToken.None);
+            var preFree = (long)accountDataSharp.Data.Free;
 
             Assert.That((await EnableSetAvatarPriceAsync(_player1,
-                1, AwesomeAvatarsErrors.FeatureLocked)).IsSuccess, Is.True);
+                1, AwesomeAvatarsErrors.FeatureUnlockableInSeason)).IsSuccess, Is.True);
 
+            accountDataSharp = await _client.GetAccountAsync(_player1, null, CancellationToken.None);
+            var postFree = (long)accountDataSharp.Data.Free;
+
+            Assert.That(preFree - postFree, Is.GreaterThan(50 * SubstrateNetwork.DECIMALS));
+            Assert.That(preFree - postFree, Is.LessThan(55 * SubstrateNetwork.DECIMALS));
+
+            var avatarPrice = new BigInteger(5 * SubstrateNetwork.DECIMALS);
+            Assert.That((await SetPriceAsync(_player1,
+                avatars[0], avatarPrice, null)).IsSuccess, Is.True);
+
+            var key = new BaseTuple<U16, H256>(new U16(_seasonId), avatars[0]);
+            var tradePrice = await _client.GetTradeAsync(key, null, CancellationToken.None);
+
+            Assert.That(tradePrice, Is.EqualTo(avatarPrice));
+
+            Assert.That((await RemovePriceAsync(_player1,
+                avatars[0], null)).IsSuccess, Is.True);
+
+            Assert.That(await _client.GetTradeAsync(key, null, CancellationToken.None), Is.Null);
         }
 
         /// <summary>
@@ -578,6 +593,19 @@ namespace Ajuna.TestSuite
         public async Task<(bool IsSuccess, ExtrinsicInfo ExtrinsicInfo)> SetPriceAsync(Account account, H256 avatarId, BigInteger price, AwesomeAvatarsErrors? avatarsErrors)
         {
             var method = AwesomeAvatarsCalls.SetPrice(avatarId, new BaseCom<U128>(price));
+            return await ExecuteTransactionTestAsync(account, method, avatarsErrors, TimeSpan.FromSeconds(90));
+        }
+
+        /// <summary>
+        /// Remove price
+        /// </summary>
+        /// <param name="account"></param>
+        /// <param name="avatarId"></param>
+        /// <param name="avatarsErrors"></param>
+        /// <returns></returns>
+        public async Task<(bool IsSuccess, ExtrinsicInfo ExtrinsicInfo)> RemovePriceAsync(Account account, H256 avatarId, AwesomeAvatarsErrors? avatarsErrors)
+        {
+            var method = AwesomeAvatarsCalls.RemovePrice(avatarId);
             return await ExecuteTransactionTestAsync(account, method, avatarsErrors, TimeSpan.FromSeconds(90));
         }
 
