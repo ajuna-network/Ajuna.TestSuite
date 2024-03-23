@@ -18,7 +18,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.sp_core.crypto
     
     
     /// <summary>
-    /// >> 483 - Composite[sp_core.crypto.KeyTypeId]
+    /// >> 485 - Composite[sp_core.crypto.KeyTypeId]
     /// </summary>
     [SubstrateNodeType(TypeDefEnum.Composite)]
     public sealed class KeyTypeId : BaseType

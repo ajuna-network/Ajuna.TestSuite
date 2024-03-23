@@ -12,7 +12,6 @@ using Substrate.Bajun.NET.NetApiExt.Generated.Storage;
 using Substrate.Integration.Client;
 using Substrate.Integration.Helper;
 using Substrate.Integration.Model;
-using Substrate.NetApi;
 using Substrate.NetApi.Extensions;
 using Substrate.NetApi.Model.Types;
 using Substrate.NetApi.Model.Types.Base;
@@ -20,7 +19,6 @@ using Substrate.NetApi.Model.Types.Primitive;
 using System;
 using System.Linq;
 using System.Numerics;
-using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,7 +29,6 @@ namespace Substrate.Integration
     /// </summary>
     public partial class SubstrateNetwork : BaseClient
     {
-
         #region Storage
 
         /// <summary>
@@ -60,9 +57,10 @@ namespace Substrate.Integration
         }
 
         /// <summary>
-        /// Get the treasurer address as string
+        /// Get treasurer
         /// </summary>
         /// <param name="seasonId"></param>
+        /// <param name="blockhash"></param>
         /// <param name="token"></param>
         /// <returns></returns>
         public async Task<string?> GetTreasurerAsync(U16 seasonId, string? blockhash, CancellationToken token)
@@ -268,6 +266,7 @@ namespace Substrate.Integration
         /// Get the treasury
         /// </summary>
         /// <param name="key"></param>
+        /// <param name="blockhash"></param>
         /// <param name="token"></param>
         /// <returns></returns>
         public async Task<BigInteger?> GetTreasuryAsync(U16 key, string? blockhash, CancellationToken token)
@@ -292,6 +291,7 @@ namespace Substrate.Integration
         /// <summary>
         /// Get the global config
         /// </summary>
+        /// <param name="blockhash"></param>
         /// <param name="token"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
@@ -318,6 +318,7 @@ namespace Substrate.Integration
         /// Get the avatars
         /// </summary>
         /// <param name="avatarId"></param>
+        /// <param name="blockhash"></param>
         /// <param name="token"></param>
         /// <returns></returns>
         public async Task<(string, AvatarSharp)?> GetAvatarsAsync(H256 avatarId, string? blockhash, CancellationToken token)
@@ -343,6 +344,7 @@ namespace Substrate.Integration
         /// Get the owners
         /// </summary>
         /// <param name="key"></param>
+        /// <param name="blockhash"></param>
         /// <param name="token"></param>
         /// <returns></returns>
         public async Task<string[]?> GetOwnersAsync(BaseTuple<AccountId32, U16> key, string? blockhash, CancellationToken token)
@@ -368,6 +370,7 @@ namespace Substrate.Integration
         /// Get locked avatars
         /// </summary>
         /// <param name="key"></param>
+        /// <param name="blockhash"></param>
         /// <param name="token"></param>
         /// <returns></returns>
         public async Task<bool?> GetLockedAvatarsAsync(H256 key, string? blockhash, CancellationToken token)
@@ -392,6 +395,7 @@ namespace Substrate.Integration
         /// <summary>
         /// Get collection id
         /// </summary>
+        /// <param name="blockhash"></param>
         /// <param name="token"></param>
         /// <returns></returns>
         public async Task<uint?> GetCollectionIdAsync(string? blockhash, CancellationToken token)
@@ -414,9 +418,10 @@ namespace Substrate.Integration
         }
 
         /// <summary>
-        /// Get the player configs
+        /// Get player configs
         /// </summary>
-        /// <param name="ownerAccount"></param>
+        /// <param name="key"></param>
+        /// <param name="blockhash"></param>
         /// <param name="token"></param>
         /// <returns></returns>
         public async Task<PlayerConfigsSharp?> GetPlayerConfigsAsync(AccountId32 key, string? blockhash, CancellationToken token)
@@ -442,6 +447,7 @@ namespace Substrate.Integration
         /// Get the player season configs
         /// </summary>
         /// <param name="key"></param>
+        /// <param name="blockhash"></param>
         /// <param name="token"></param>
         /// <returns></returns>
         public async Task<PlayerSeasonConfigsSharp?> GetPlayerSeasonConfigsAsync(BaseTuple<AccountId32, U16> key, string? blockhash, CancellationToken token)
@@ -467,6 +473,7 @@ namespace Substrate.Integration
         /// Get the season stats
         /// </summary>
         /// <param name="seasonAccount"></param>
+        /// <param name="blockhash"></param>
         /// <param name="token"></param>
         /// <returns></returns>
         public async Task<SeasonInfoSharp?> GetSeasonStatsAsync(BaseTuple<U16, AccountId32> seasonAccount, string? blockhash, CancellationToken token)
@@ -492,6 +499,7 @@ namespace Substrate.Integration
         /// Get trade
         /// </summary>
         /// <param name="key"></param>
+        /// <param name="blockhash"></param>
         /// <param name="token"></param>
         /// <returns></returns>
         public async Task<BigInteger?> GetTradeAsync(BaseTuple<U16, H256> key, string? blockhash, CancellationToken token)
@@ -516,6 +524,7 @@ namespace Substrate.Integration
         /// <summary>
         /// Get service account
         /// </summary>
+        /// <param name="blockhash"></param>
         /// <param name="token"></param>
         /// <returns></returns>
         public async Task<string?> GetServiceAccountAsync(string? blockhash, CancellationToken token)
@@ -541,6 +550,7 @@ namespace Substrate.Integration
         /// Get preparation
         /// </summary>
         /// <param name="key"></param>
+        /// <param name="blockhash"></param>
         /// <param name="token"></param>
         /// <returns></returns>
         public async Task<byte[]?> GetPreparationAsync(H256 key, string? blockhash, CancellationToken token)
@@ -576,7 +586,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> MintAsync(Account account, MintOption mintOption, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "Mint";
+            var extrinsicType = "AwesomeAvatarsCalls.Mint";
 
             if (!IsConnected || account == null)
             {
@@ -599,7 +609,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> ForgeAsync(Account account, H256 leader, BaseVec<H256> sacrificies, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "Forge";
+            var extrinsicType = "AwesomeAvatarsCalls.Forge";
 
             if (!IsConnected || account == null)
             {
@@ -622,7 +632,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> TransferAvatarAsync(Account account, AccountId32 to, H256 avatarId, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "TransferAvatar";
+            var extrinsicType = "AwesomeAvatarsCalls.TransferAvatar";
 
             if (!IsConnected || account == null)
             {
@@ -645,7 +655,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> TransferFreeMintsAsync(Account account, AccountId32 dest, U16 howMany, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "TransferFreeMints";
+            var extrinsicType = "AwesomeAvatarsCalls.TransferFreeMints";
 
             if (!IsConnected || account == null)
             {
@@ -668,7 +678,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> SetPriceAsync(Account account, H256 avatarId, BaseCom<U128> price, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "SetPrice";
+            var extrinsicType = "AwesomeAvatarsCalls.SetPrice";
 
             if (!IsConnected || account == null)
             {
@@ -690,7 +700,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> RemovePriceAsync(Account account, H256 avatarId, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "RemovePrice";
+            var extrinsicType = "AwesomeAvatarsCalls.RemovePrice";
 
             if (!IsConnected || account == null)
             {
@@ -711,7 +721,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> BuyAsync(H256 avatarId, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "Buy";
+            var extrinsicType = "AwesomeAvatarsCalls.Buy";
 
             if (!IsConnected || Account == null)
             {
@@ -723,7 +733,7 @@ namespace Substrate.Integration
             return await GenericExtrinsicAsync(Account, extrinsicType, extrinsic, concurrentTasks, token);
         }
 
-        private string UpgradeStorageKey => "UpgradeStorage";
+        private string UpgradeStorageKey => "AwesomeAvatarsCalls.UpgradeStorage";
 
         /// <summary>
         /// Check if the storage can be upgraded
@@ -774,7 +784,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> SetOrganizerAsync(Account sudo, AccountId32 organizer, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "SetOrganizer";
+            var extrinsicType = "AwesomeAvatarsCalls.SetOrganizer";
 
             if (!IsConnected || sudo == null)
             {
@@ -801,7 +811,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> SetTreasurerAsync(Account organizer, U16 seasonId, AccountId32 treasurer, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "SetTreasurer";
+            var extrinsicType = "AwesomeAvatarsCalls.SetTreasurer";
 
             if (!IsConnected || organizer == null)
             {
@@ -823,7 +833,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> ClaimTreasuryAsync(Account organizer, U16 seasonId, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "ClaimTreasury";
+            var extrinsicType = "AwesomeAvatarsCalls.ClaimTreasury";
 
             if (!IsConnected || organizer == null)
             {
@@ -850,7 +860,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> SetSeasonAsync(Account organizer, U16 seasonId, Season season, SeasonMeta seasonMeta, SeasonSchedule seasonSchedule, TradeFilters tradeFilters, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "SetSeason";
+            var extrinsicType = "AwesomeAvatarsCalls.SetSeason";
 
             if (!IsConnected || organizer == null)
             {
@@ -877,7 +887,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> UpdateGlobalConfigAsync(Account organizer, GlobalConfig newGlobalConfig, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "UpdateGlobalConfig";
+            var extrinsicType = "AwesomeAvatarsCalls.UpdateGlobalConfig";
 
             if (!IsConnected || organizer == null)
             {
@@ -900,7 +910,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> SetFreeMintsAsync(Account organizer, AccountId32 dest, U16 howMany, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "SetFreeMints";
+            var extrinsicType = "AwesomeAvatarsCalls.SetFreeMints";
 
             if (!IsConnected || organizer == null)
             {
@@ -922,7 +932,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> SetCollectionIdAsync(Account organizer, uint collectionId, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "SetCollectionId";
+            var extrinsicType = "AwesomeAvatarsCalls.SetCollectionId";
 
             if (!IsConnected || organizer == null)
             {
@@ -944,7 +954,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> LockAvatarAsync(Account organizer, H256 avatarId, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "LockAvatar";
+            var extrinsicType = "AwesomeAvatarsCalls.LockAvatar";
 
             if (!IsConnected || organizer == null)
             {
@@ -966,7 +976,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> UnlockAvatarAsync(Account organizer, H256 avatarId, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "UnlockAvatar";
+            var extrinsicType = "AwesomeAvatarsCalls.UnlockAvatar";
 
             if (!IsConnected || organizer == null)
             {
@@ -988,7 +998,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> SetServiceAccountAsync(Account organizer, AccountId32 serviceAccount, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "SetServiceAccount";
+            var extrinsicType = "AwesomeAvatarsCalls.SetServiceAccount";
 
             if (!IsConnected || organizer == null)
             {
@@ -1010,7 +1020,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> PrepareAvatarAsync(Account organizer, H256 avatarId, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "PrepareAvatar";
+            var extrinsicType = "AwesomeAvatarsCalls.PrepareAvatar";
 
             if (!IsConnected || organizer == null)
             {
@@ -1032,7 +1042,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> UnprepareAvatarAsync(Account organizer, H256 avatarId, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "UnprepareAvatar";
+            var extrinsicType = "AwesomeAvatarsCalls.UnprepareAvatar";
 
             if (!IsConnected || organizer == null)
             {
@@ -1055,7 +1065,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> PrepareIpfsAsync(Account organizer, H256 avatarId, string url, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "PrepareIpfs";
+            var extrinsicType = "AwesomeAvatarsCalls.PrepareIpfs";
 
             if (!IsConnected || organizer == null)
             {
@@ -1082,7 +1092,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> ModifyFreemintWhitelistAsync(Account organizer, AccountId32 account, WhitelistOperation operation, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "ModifyFreemintWhitelist";
+            var extrinsicType = "AwesomeAvatarsCalls.ModifyFreemintWhitelist";
 
             if (!IsConnected || organizer == null)
             {
@@ -1108,7 +1118,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> AddAffiliationAsync(Account account, U32 affiliateId, U16 seasonId, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "AddAffiliation";
+            var extrinsicType = "AwesomeAvatarsCalls.AddAffiliation";
 
             if (!IsConnected || account == null)
             {
@@ -1129,9 +1139,9 @@ namespace Substrate.Integration
         /// <param name="concurrentTasks"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task<string?> EnableAffiliatorAsync(Account organizer, EnumAffiliatorTarget target, U16 seasonId, int concurrentTasks, CancellationToken token)
+        public async Task<string?> EnableAffiliatorAsync(Account organizer, EnumUnlockTarget target, U16 seasonId, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "EnableAffiliator";
+            var extrinsicType = "AwesomeAvatarsCalls.EnableAffiliator";
 
             if (!IsConnected || organizer == null)
             {
@@ -1153,7 +1163,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> RemoveAffiliationAsync(Account organizer, AccountId32 accountId32, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "RemoveAffiliation";
+            var extrinsicType = "AwesomeAvatarsCalls.RemoveAffiliation";
 
             if (!IsConnected || organizer == null)
             {
@@ -1176,7 +1186,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> SetRuleForAsync(Account organizer, EnumAffiliateMethods ruleId, BoundedVecT19 rule, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "SetRuleFor";
+            var extrinsicType = "AwesomeAvatarsCalls.SetRuleFor";
 
             if (!IsConnected || organizer == null)
             {
@@ -1198,7 +1208,7 @@ namespace Substrate.Integration
         /// <returns></returns>
         public async Task<string?> ClearRuleForAsync(Account organizer, EnumAffiliateMethods ruleId, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "ClearRuleFor";
+            var extrinsicType = "AwesomeAvatarsCalls.ClearRuleFor";
 
             if (!IsConnected || organizer == null)
             {
@@ -1213,21 +1223,22 @@ namespace Substrate.Integration
         /// <summary>
         /// Enable set avatar price
         /// </summary>
-        /// <param name="organizer"></param>
+        /// <param name="account"></param>
+        /// <param name="target"></param>
         /// <param name="seasonId"></param>
         /// <param name="concurrentTasks"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task<string?> EnableSetAvatarPriceAsync(Account account, U16 seasonId, int concurrentTasks, CancellationToken token)
+        public async Task<string?> EnableSetAvatarPriceAsync(Account account, EnumUnlockTarget target, U16 seasonId, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "EnableSetAvatarPrice";
+            var extrinsicType = "AwesomeAvatarsCalls.EnableSetAvatarPrice";
 
             if (!IsConnected || account == null)
             {
                 return null;
             }
 
-            var extrinsic = AwesomeAvatarsCalls.EnableSetAvatarPrice(seasonId);
+            var extrinsic = AwesomeAvatarsCalls.EnableSetAvatarPrice(target, seasonId);
 
             return await GenericExtrinsicAsync(account, extrinsicType, extrinsic, concurrentTasks, token);
         }
@@ -1236,20 +1247,44 @@ namespace Substrate.Integration
         /// Enable avatar transfer
         /// </summary>
         /// <param name="account"></param>
+        /// <param name="target"></param>
         /// <param name="seasonId"></param>
         /// <param name="concurrentTasks"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task<string?> EnableAvatarTransferAsync(Account account, U16 seasonId, int concurrentTasks, CancellationToken token)
+        public async Task<string?> EnableAvatarTransferAsync(Account account, EnumUnlockTarget target, U16 seasonId, int concurrentTasks, CancellationToken token)
         {
-            var extrinsicType = "EnableAvatarTransfer";
+            var extrinsicType = "AwesomeAvatarsCalls.EnableAvatarTransfer";
 
             if (!IsConnected || account == null)
             {
                 return null;
             }
 
-            var extrinsic = AwesomeAvatarsCalls.EnableAvatarTransfer(seasonId);
+            var extrinsic = AwesomeAvatarsCalls.EnableAvatarTransfer(target, seasonId);
+
+            return await GenericExtrinsicAsync(account, extrinsicType, extrinsic, concurrentTasks, token);
+        }
+
+        /// <summary>
+        /// Set the unlock config
+        /// </summary>
+        /// <param name="account"></param>
+        /// <param name="seasonId"></param>
+        /// <param name="unlockConfigs"></param>
+        /// <param name="concurrentTasks"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public async Task<string?> SetUnlockConfigAsync(Account account, U16 seasonId, UnlockConfigs unlockConfigs, int concurrentTasks, CancellationToken token)
+        {
+            var extrinsicType = "AwesomeAvatarsCalls.SetUnlockConfig";
+
+            if (!IsConnected || account == null)
+            {
+                return null;
+            }
+
+            var extrinsic = AwesomeAvatarsCalls.SetUnlockConfig(seasonId, unlockConfigs);
 
             return await GenericExtrinsicAsync(account, extrinsicType, extrinsic, concurrentTasks, token);
         }

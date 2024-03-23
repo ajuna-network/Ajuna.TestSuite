@@ -38,7 +38,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_balances.types
     }
     
     /// <summary>
-    /// >> 458 - Variant[pallet_balances.types.Reasons]
+    /// >> 460 - Variant[pallet_balances.types.Reasons]
     /// </summary>
     public sealed class EnumReasons : BaseEnum<Reasons>
     {

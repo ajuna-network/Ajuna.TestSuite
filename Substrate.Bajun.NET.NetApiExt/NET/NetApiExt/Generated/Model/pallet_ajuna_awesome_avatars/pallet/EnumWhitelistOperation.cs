@@ -38,7 +38,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_awesome_ava
     }
     
     /// <summary>
-    /// >> 390 - Variant[pallet_ajuna_awesome_avatars.pallet.WhitelistOperation]
+    /// >> 392 - Variant[pallet_ajuna_awesome_avatars.pallet.WhitelistOperation]
     /// </summary>
     public sealed class EnumWhitelistOperation : BaseEnum<WhitelistOperation>
     {

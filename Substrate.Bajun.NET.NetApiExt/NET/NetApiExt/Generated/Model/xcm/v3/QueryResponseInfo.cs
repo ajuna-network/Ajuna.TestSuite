@@ -18,7 +18,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.xcm.v3
     
     
     /// <summary>
-    /// >> 356 - Composite[xcm.v3.QueryResponseInfo]
+    /// >> 358 - Composite[xcm.v3.QueryResponseInfo]
     /// </summary>
     [SubstrateNodeType(TypeDefEnum.Composite)]
     public sealed class QueryResponseInfo : BaseType

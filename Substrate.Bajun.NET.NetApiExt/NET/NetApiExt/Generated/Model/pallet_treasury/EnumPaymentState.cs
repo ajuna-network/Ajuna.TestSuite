@@ -38,7 +38,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_treasury
     }
     
     /// <summary>
-    /// >> 530 - Variant[pallet_treasury.PaymentState]
+    /// >> 532 - Variant[pallet_treasury.PaymentState]
     /// </summary>
     public sealed class EnumPaymentState : BaseEnumExt<PaymentState, BaseVoid, Substrate.NetApi.Model.Types.Base.BaseTuple, BaseVoid>
     {

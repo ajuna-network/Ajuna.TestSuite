@@ -33,7 +33,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_nfts.types
     }
     
     /// <summary>
-    /// >> 190 - Variant[pallet_nfts.types.PriceDirection]
+    /// >> 192 - Variant[pallet_nfts.types.PriceDirection]
     /// </summary>
     public sealed class EnumPriceDirection : BaseEnum<PriceDirection>
     {

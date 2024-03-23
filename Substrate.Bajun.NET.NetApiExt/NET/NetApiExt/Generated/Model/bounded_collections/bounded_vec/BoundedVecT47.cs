@@ -18,7 +18,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.bounded_collections.boun
     
     
     /// <summary>
-    /// >> 560 - Composite[bounded_collections.bounded_vec.BoundedVecT47]
+    /// >> 562 - Composite[bounded_collections.bounded_vec.BoundedVecT47]
     /// </summary>
     [SubstrateNodeType(TypeDefEnum.Composite)]
     public sealed class BoundedVecT47 : BaseType

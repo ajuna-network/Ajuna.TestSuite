@@ -18,7 +18,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_treasury
     
     
     /// <summary>
-    /// >> 529 - Composite[pallet_treasury.SpendStatus]
+    /// >> 531 - Composite[pallet_treasury.SpendStatus]
     /// </summary>
     [SubstrateNodeType(TypeDefEnum.Composite)]
     public sealed class SpendStatus : BaseType

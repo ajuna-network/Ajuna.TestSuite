@@ -18,7 +18,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.frame_system
     
     
     /// <summary>
-    /// >> 199 - Composite[frame_system.CodeUpgradeAuthorization]
+    /// >> 201 - Composite[frame_system.CodeUpgradeAuthorization]
     /// </summary>
     [SubstrateNodeType(TypeDefEnum.Composite)]
     public sealed class CodeUpgradeAuthorization : BaseType

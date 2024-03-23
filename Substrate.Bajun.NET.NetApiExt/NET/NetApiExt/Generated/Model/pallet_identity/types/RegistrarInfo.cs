@@ -18,7 +18,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_identity.types
     
     
     /// <summary>
-    /// >> 426 - Composite[pallet_identity.types.RegistrarInfo]
+    /// >> 428 - Composite[pallet_identity.types.RegistrarInfo]
     /// </summary>
     [SubstrateNodeType(TypeDefEnum.Composite)]
     public sealed class RegistrarInfo : BaseType

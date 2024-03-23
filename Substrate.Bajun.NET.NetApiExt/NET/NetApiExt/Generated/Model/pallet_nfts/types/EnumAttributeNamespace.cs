@@ -43,7 +43,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_nfts.types
     }
     
     /// <summary>
-    /// >> 187 - Variant[pallet_nfts.types.AttributeNamespace]
+    /// >> 189 - Variant[pallet_nfts.types.AttributeNamespace]
     /// </summary>
     public sealed class EnumAttributeNamespace : BaseEnumExt<AttributeNamespace, BaseVoid, BaseVoid, BaseVoid, Substrate.Bajun.NET.NetApiExt.Generated.Model.sp_core.crypto.AccountId32>
     {

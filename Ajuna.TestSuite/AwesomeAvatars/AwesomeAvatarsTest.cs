@@ -1,4 +1,6 @@
+using Newtonsoft.Json.Linq;
 using Substrate.Bajun.NET.NetApiExt.Generated.Model.bajun_runtime;
+using Substrate.Bajun.NET.NetApiExt.Generated.Model.bounded_collections.bounded_vec;
 using Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_awesome_avatars.pallet;
 using Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_awesome_avatars.types.avatar;
 using Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_awesome_avatars.types.avatar.rarity_tier;
@@ -67,7 +69,7 @@ namespace Ajuna.TestSuite
         {
             var enumCalls = new List<EnumRuntimeCall>
             {
-                PalletBalances.BalancesTransferKeepAlive(_player1.ToAccountId32(), 5 * SubstrateNetwork.DECIMALS),
+                PalletBalances.BalancesTransferKeepAlive(_player1.ToAccountId32(), 1000 * SubstrateNetwork.DECIMALS),
                 PalletAwesomeAvatars.SetFreeMints(_player1.ToAccountId32(), 500),
             };
 
@@ -86,7 +88,6 @@ namespace Ajuna.TestSuite
             await tcs.Task;
             _client.ExtrinsicManager.ExtrinsicUpdated -= OnExtrinsicUpdated;
         }
-
 
         [Test, Order(3)]
         public async Task FundPlayer2TestAsync()
@@ -133,7 +134,8 @@ namespace Ajuna.TestSuite
                 affiliateConfigSharp,
                 null);
 
-            Assert.That(result.Item2.SystemExtrinsicEvent(out var systemExtrinsicEvent, out var errorMsg), Is.True);
+            Assert.That(result.IsSuccess, Is.True);
+            Assert.That(result.ExtrinsicInfo.SystemExtrinsicEvent(out var systemExtrinsicEvent, out var errorMsg), Is.True);
             Assert.That(systemExtrinsicEvent, Is.Not.Null);
             Assert.That(systemExtrinsicEvent, Is.EqualTo(Substrate.Bajun.NET.NetApiExt.Generated.Model.frame_system.pallet.Event.ExtrinsicSuccess));
 
@@ -161,6 +163,38 @@ namespace Ajuna.TestSuite
             Assert.That(globalConfigSharp.AffiliateConfig.EnabledInBuy, Is.EqualTo(affiliateConfigSharp.EnabledInBuy));
             Assert.That(globalConfigSharp.AffiliateConfig.EnabledInUpgrade, Is.EqualTo(affiliateConfigSharp.EnabledInUpgrade));
             Assert.That(globalConfigSharp.AffiliateConfig.AffiliatorEnableFee, Is.EqualTo(affiliateConfigSharp.AffiliatorEnableFee));
+        }
+
+        [Test, Order(4)]
+        public async Task InitialUnlockConfigTestAsync()
+        {
+            //1: Minted, 2: Freeminted, 3: Forged, 4: Bought, 5: Sold
+            
+            var setPriceUnlock = new BoundedVecT6();
+            setPriceUnlock.Value = new BaseVec<U8>(
+                [new U8(0x05), new U8(0x05), new U8(0x05), new U8(0x00), new U8(0x00)]);
+            
+            var avatarTransferUnlock = new BoundedVecT6();
+            avatarTransferUnlock.Value = new BaseVec<U8>(
+                [new U8(0x0A), new U8(0x05), new U8(0x05), new U8(0x00), new U8(0x00)]);
+            
+            var affiliateUnlock = new BoundedVecT6();
+            affiliateUnlock.Value = new BaseVec<U8>(
+                [new U8(0x14), new U8(0x05), new U8(0x05), new U8(0x00), new U8(0x00)]);
+
+            var unlockConfigs = new UnlockConfigs
+            {
+                SetPriceUnlock = new BaseOpt<BoundedVecT6>(),
+                AvatarTransferUnlock = new BaseOpt<BoundedVecT6>(),
+                AffiliateUnlock = new BaseOpt<BoundedVecT6>()
+            };
+
+            unlockConfigs.SetPriceUnlock.Create(setPriceUnlock);
+            unlockConfigs.AvatarTransferUnlock.Create(setPriceUnlock);
+            unlockConfigs.AffiliateUnlock.Create(affiliateUnlock);
+
+            Assert.That((await UnlockConfigAsync(_organizer,
+                _seasonId, unlockConfigs, null)).IsSuccess, Is.True);
         }
 
         [Test, Order(5)]
@@ -269,8 +303,8 @@ namespace Ajuna.TestSuite
 
             if (!seasonStatusSharp.Early && !seasonStatusSharp.Active && !seasonStatusSharp.EarlyEnded && seasonStatusSharp.SeasonId == 1)
             {
-                _ = await MintAsync(_player1, MintPayment.Free, AwesomeAvatarsErrors.SeasonClosed);
-                _ = await MintAsync(_player2, MintPayment.Normal, AwesomeAvatarsErrors.SeasonClosed);
+                Assert.That((await MintAsync(_player1, MintPayment.Free, AwesomeAvatarsErrors.SeasonClosed)).IsSuccess, Is.True);
+                Assert.That((await MintAsync(_player2, MintPayment.Normal, AwesomeAvatarsErrors.SeasonClosed)).IsSuccess, Is.True);
             }
 
             seasonStatusSharp = await _client.GetCurrentSeasonStatusAsync(null, CancellationToken.None);
@@ -337,27 +371,28 @@ namespace Ajuna.TestSuite
         }
 
         [Test, Order(9)]
-        public async Task TransferAvatarPlayer1TestAsync()
-        {
-            var avatars = await GetAvatarIdsAsync(_player1);
-            _ = await TransferAvatarAsync(_player1, _player2.ToAccountId32(), avatars[0], AwesomeAvatarsErrors.FeatureLocked);
-        }
-
-        [Test, Order(9)]
-        public async Task EnableAffiliatorPlayer1TestAsync()
-        {
-            _ = await EnableAffiliatorAsync(_player1, AffiliatorTarget.OneselfFree, null, 1, AwesomeAvatarsErrors.FeatureUnlockableInSeason);
-        }
-
-        [Test, Order(9)]
-        public async Task EarlySeasonPlayer2ForgeTestAsync()
+        public async Task EarlySeasonPlayer1TestsAsync()
         {
             var avatars = await GetAvatarIdsAsync(_player1);
 
-            _ = await ForgeAsync(_player1, avatars[0], [avatars[1]], null);
+            Assert.That((await ForgeAsync(_player1, 
+                avatars[0], [avatars[1]], null)).IsSuccess, Is.True);
+
+            Assert.That((await TransferAvatarAsync(_player1,
+                _player2.ToAccountId32(), avatars[2], AwesomeAvatarsErrors.FeatureLocked)).IsSuccess, Is.True);
+
+            Assert.That((await EnableAffiliatorAsync(_player1,
+                UnlockTarget.OneselfFree, null, 1, AwesomeAvatarsErrors.UnlockCriteriaNotFullfilled)).IsSuccess, Is.True);
         }
 
-        [Test, Order(9)]
+
+        [Test, Order(10)]
+        public async Task EarlySeasonPlayer2TestsAsync()
+        {
+            Assert.True(true);
+        }
+
+        [Test, Order(11)]
         public async Task WaitForActiveSeasonAsync()
         {
             SeasonStatusSharp? seasonStatusSharp;
@@ -374,7 +409,7 @@ namespace Ajuna.TestSuite
             while (!seasonStatusSharp.Active && seasonStatusSharp.SeasonId == 1);
         }
 
-        [Test, Order(10)]
+        [Test, Order(12)]
         public async Task FullMintConfigTestAsync()
         {
             Assert.That((await GlobalConfigAsync(_organizer,
@@ -388,7 +423,7 @@ namespace Ajuna.TestSuite
             _ = await MintAsync(_player1, MintPayment.Free, null);
         }
 
-        [Test, Order(11)]
+        [Test, Order(13)]
         public async Task FullForgeConfigTestAsync()
         {
             Assert.That((await GlobalConfigAsync(_organizer,
@@ -404,7 +439,7 @@ namespace Ajuna.TestSuite
             _ = await ForgeAsync(_player1, avatars[0], [avatars[1]], null);
         }
 
-        [Test, Order(12)]
+        [Test, Order(14)]
         public async Task FullAvatarTransferConfigTestAsync()
         {
             Assert.That((await GlobalConfigAsync(_organizer,
@@ -419,25 +454,25 @@ namespace Ajuna.TestSuite
             _ = await TransferAvatarAsync(_player1, _player2.ToAccountId32(), avatars[0], AwesomeAvatarsErrors.FeatureLocked);
         }
 
-        [Test, Order(13)]
+        [Test, Order(15)]
         public async Task FullFreemintTransferConfigTestAsync()
         {
             Assert.That((await GlobalConfigAsync(_organizer,
                 null, null, null, new FreemintTransferConfigSharp(FreeMintTransferMode.Closed, 1, 2), null, null, null, null)).IsSuccess, Is.True);
 
-            Assert.That((await TransferFreeMintsAsync(_player1, 
+            Assert.That((await TransferFreeMintsAsync(_player1,
                 _organizer.ToAccountId32(), 10, AwesomeAvatarsErrors.FreeMintTransferClosed)).IsSuccess, Is.True);
 
             Assert.That((await GlobalConfigAsync(_organizer,
                 null, null, null, new FreemintTransferConfigSharp(FreeMintTransferMode.Open, 1, 2), null, null, null, null)).IsSuccess, Is.True);
 
-            Assert.That((await TransferFreeMintsAsync(_player1, 
+            Assert.That((await TransferFreeMintsAsync(_player1,
                 _organizer.ToAccountId32(), 2, null)).IsSuccess, Is.True);
 
             Assert.That((await GlobalConfigAsync(_organizer,
                 null, null, null, new FreemintTransferConfigSharp(FreeMintTransferMode.WhitelistOnly, 1, 2), null, null, null, null)).IsSuccess, Is.True);
 
-            Assert.That((await TransferFreeMintsAsync(_player1, 
+            Assert.That((await TransferFreeMintsAsync(_player1,
                 _organizer.ToAccountId32(), 2, AwesomeAvatarsErrors.FreeMintTransferClosed)).IsSuccess, Is.True);
 
             Assert.That((await ModifyFreemintWhitelistAsync(_player1,
@@ -456,7 +491,7 @@ namespace Ajuna.TestSuite
                 _player1.ToAccountId32(), WhitelistOperation.RemoveAccount, null)).IsSuccess, Is.True);
         }
 
-        [Test, Order(14)]
+        [Test, Order(16)]
         public async Task FullTradeConfigTestAsync()
         {
             Assert.That((await GlobalConfigAsync(_organizer,
@@ -477,7 +512,10 @@ namespace Ajuna.TestSuite
             var preFree = (long)accountDataSharp.Data.Free;
 
             Assert.That((await EnableSetAvatarPriceAsync(_player1,
-                1, AwesomeAvatarsErrors.FeatureUnlockableInSeason)).IsSuccess, Is.True);
+                UnlockTarget.OneselfFree, null, 1, AwesomeAvatarsErrors.UnlockCriteriaNotFullfilled)).IsSuccess, Is.True);
+
+            Assert.That((await EnableSetAvatarPriceAsync(_player1,
+                UnlockTarget.OneselfPaying, null, 1, null)).IsSuccess, Is.True);
 
             accountDataSharp = await _client.GetAccountAsync(_player1, null, CancellationToken.None);
             var postFree = (long)accountDataSharp.Data.Free;
@@ -613,16 +651,16 @@ namespace Ajuna.TestSuite
         /// Enable affiliator
         /// </summary>
         /// <param name="account"></param>
-        /// <param name="affiliatorTarget"></param>
+        /// <param name="unlockTarget"></param>
         /// <param name="other"></param>
         /// <param name="seasonId"></param>
         /// <param name="avatarsErrors"></param>
         /// <returns></returns>
-        public async Task<(bool IsSuccess, ExtrinsicInfo ExtrinsicInfo)> EnableAffiliatorAsync(Account account, AffiliatorTarget affiliatorTarget, AccountId32? other, ushort seasonId, AwesomeAvatarsErrors? avatarsErrors)
+        public async Task<(bool IsSuccess, ExtrinsicInfo ExtrinsicInfo)> EnableAffiliatorAsync(Account account, UnlockTarget unlockTarget, AccountId32? other, ushort seasonId, AwesomeAvatarsErrors? avatarsErrors)
         {
-            var enumAffiliatorTarget = new EnumAffiliatorTarget();
+            var enumAffiliatorTarget = new EnumUnlockTarget();
             IType otherAccount = other != null ? other : new BaseVoid();
-            enumAffiliatorTarget.Create(affiliatorTarget, otherAccount);
+            enumAffiliatorTarget.Create(unlockTarget, otherAccount);
             var method = AwesomeAvatarsCalls.EnableAffiliator(enumAffiliatorTarget, new U16(seasonId));
             return await ExecuteTransactionTestAsync(account, method, avatarsErrors, TimeSpan.FromSeconds(90));
         }
@@ -631,25 +669,35 @@ namespace Ajuna.TestSuite
         /// Enable avatar transfer
         /// </summary>
         /// <param name="account"></param>
+        /// <param name="unlockTarget"></param>
+        /// <param name="other"></param>
         /// <param name="seasonId"></param>
         /// <param name="avatarsErrors"></param>
         /// <returns></returns>
-        public async Task<(bool IsSuccess, ExtrinsicInfo ExtrinsicInfo)> EnableAvatarTransferAsync(Account account, ushort seasonId, AwesomeAvatarsErrors? avatarsErrors)
+        public async Task<(bool IsSuccess, ExtrinsicInfo ExtrinsicInfo)> EnableAvatarTransferAsync(Account account, UnlockTarget unlockTarget, AccountId32? other, ushort seasonId, AwesomeAvatarsErrors? avatarsErrors)
         {
-            var method = AwesomeAvatarsCalls.EnableAvatarTransfer(new U16(seasonId));
+            var enumAffiliatorTarget = new EnumUnlockTarget();
+            IType otherAccount = other != null ? other : new BaseVoid();
+            enumAffiliatorTarget.Create(unlockTarget, otherAccount);
+            var method = AwesomeAvatarsCalls.EnableAvatarTransfer(enumAffiliatorTarget, new U16(seasonId));
             return await ExecuteTransactionTestAsync(account, method, avatarsErrors, TimeSpan.FromSeconds(90));
         }
 
         /// <summary>
-        /// Enable set avatar
+        /// Enable set avatar price
         /// </summary>
         /// <param name="account"></param>
+        /// <param name="unlockTarget"></param>
+        /// <param name="other"></param>
         /// <param name="seasonId"></param>
         /// <param name="avatarsErrors"></param>
         /// <returns></returns>
-        public async Task<(bool IsSuccess, ExtrinsicInfo ExtrinsicInfo)> EnableSetAvatarPriceAsync(Account account, ushort seasonId, AwesomeAvatarsErrors? avatarsErrors)
+        public async Task<(bool IsSuccess, ExtrinsicInfo ExtrinsicInfo)> EnableSetAvatarPriceAsync(Account account, UnlockTarget unlockTarget, AccountId32? other, ushort seasonId, AwesomeAvatarsErrors? avatarsErrors)
         {
-            var method = AwesomeAvatarsCalls.EnableSetAvatarPrice(new U16(seasonId));
+            var enumAffiliatorTarget = new EnumUnlockTarget();
+            IType otherAccount = other != null ? other : new BaseVoid();
+            enumAffiliatorTarget.Create(unlockTarget, otherAccount);
+            var method = AwesomeAvatarsCalls.EnableSetAvatarPrice(enumAffiliatorTarget, new U16(seasonId));
             return await ExecuteTransactionTestAsync(account, method, avatarsErrors, TimeSpan.FromSeconds(90));
         }
 
@@ -699,6 +747,20 @@ namespace Ajuna.TestSuite
 
             var method = AwesomeAvatarsCalls.UpdateGlobalConfig(globalConfig);
 
+            return await ExecuteTransactionTestAsync(account, method, avatarsErrors, TimeSpan.FromSeconds(90));
+        }
+
+        /// <summary>
+        /// Unlock config
+        /// </summary>
+        /// <param name="account"></param>
+        /// <param name="seasonId"></param>
+        /// <param name="unlockConfigs"></param>
+        /// <param name="avatarsErrors"></param>
+        /// <returns></returns>
+        private async Task<(bool IsSuccess, ExtrinsicInfo ExtrinsicInfo)> UnlockConfigAsync(Account account, ushort seasonId, UnlockConfigs unlockConfigs, AwesomeAvatarsErrors? avatarsErrors)
+        {
+            var method = AwesomeAvatarsCalls.SetUnlockConfig(new U16(seasonId), unlockConfigs);
             return await ExecuteTransactionTestAsync(account, method, avatarsErrors, TimeSpan.FromSeconds(90));
         }
 

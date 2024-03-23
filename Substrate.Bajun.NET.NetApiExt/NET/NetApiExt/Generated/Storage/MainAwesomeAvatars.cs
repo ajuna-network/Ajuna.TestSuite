@@ -967,7 +967,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Storage
         /// >> enable_affiliator
         /// Contains a variant per dispatchable extrinsic that this pallet has.
         /// </summary>
-        public static Method EnableAffiliator(Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_awesome_avatars.types.config.EnumAffiliatorTarget target, Substrate.NetApi.Model.Types.Primitive.U16 season_id)
+        public static Method EnableAffiliator(Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_awesome_avatars.types.config.EnumUnlockTarget target, Substrate.NetApi.Model.Types.Primitive.U16 season_id)
         {
             System.Collections.Generic.List<byte> byteArray = new List<byte>();
             byteArray.AddRange(target.Encode());
@@ -1013,9 +1013,10 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Storage
         /// >> enable_set_avatar_price
         /// Contains a variant per dispatchable extrinsic that this pallet has.
         /// </summary>
-        public static Method EnableSetAvatarPrice(Substrate.NetApi.Model.Types.Primitive.U16 season_id)
+        public static Method EnableSetAvatarPrice(Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_awesome_avatars.types.config.EnumUnlockTarget target, Substrate.NetApi.Model.Types.Primitive.U16 season_id)
         {
             System.Collections.Generic.List<byte> byteArray = new List<byte>();
+            byteArray.AddRange(target.Encode());
             byteArray.AddRange(season_id.Encode());
             return new Method(51, "AwesomeAvatars", 27, "enable_set_avatar_price", byteArray.ToArray());
         }
@@ -1024,11 +1025,24 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Storage
         /// >> enable_avatar_transfer
         /// Contains a variant per dispatchable extrinsic that this pallet has.
         /// </summary>
-        public static Method EnableAvatarTransfer(Substrate.NetApi.Model.Types.Primitive.U16 season_id)
+        public static Method EnableAvatarTransfer(Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_awesome_avatars.types.config.EnumUnlockTarget target, Substrate.NetApi.Model.Types.Primitive.U16 season_id)
+        {
+            System.Collections.Generic.List<byte> byteArray = new List<byte>();
+            byteArray.AddRange(target.Encode());
+            byteArray.AddRange(season_id.Encode());
+            return new Method(51, "AwesomeAvatars", 28, "enable_avatar_transfer", byteArray.ToArray());
+        }
+        
+        /// <summary>
+        /// >> set_unlock_config
+        /// Contains a variant per dispatchable extrinsic that this pallet has.
+        /// </summary>
+        public static Method SetUnlockConfig(Substrate.NetApi.Model.Types.Primitive.U16 season_id, Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_awesome_avatars.types.config.UnlockConfigs unlock_configs)
         {
             System.Collections.Generic.List<byte> byteArray = new List<byte>();
             byteArray.AddRange(season_id.Encode());
-            return new Method(51, "AwesomeAvatars", 28, "enable_avatar_transfer", byteArray.ToArray());
+            byteArray.AddRange(unlock_configs.Encode());
+            return new Method(51, "AwesomeAvatars", 29, "set_unlock_config", byteArray.ToArray());
         }
     }
     

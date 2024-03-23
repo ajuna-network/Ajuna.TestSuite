@@ -18,7 +18,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_nfts.types
     
     
     /// <summary>
-    /// >> 397 - Composite[pallet_nfts.types.MintSettings]
+    /// >> 399 - Composite[pallet_nfts.types.MintSettings]
     /// </summary>
     [SubstrateNodeType(TypeDefEnum.Composite)]
     public sealed class MintSettings : BaseType

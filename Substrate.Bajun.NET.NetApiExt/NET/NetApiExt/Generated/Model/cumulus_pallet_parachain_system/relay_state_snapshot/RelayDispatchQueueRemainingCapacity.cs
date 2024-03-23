@@ -18,7 +18,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.cumulus_pallet_parachain
     
     
     /// <summary>
-    /// >> 233 - Composite[cumulus_pallet_parachain_system.relay_state_snapshot.RelayDispatchQueueRemainingCapacity]
+    /// >> 235 - Composite[cumulus_pallet_parachain_system.relay_state_snapshot.RelayDispatchQueueRemainingCapacity]
     /// </summary>
     [SubstrateNodeType(TypeDefEnum.Composite)]
     public sealed class RelayDispatchQueueRemainingCapacity : BaseType

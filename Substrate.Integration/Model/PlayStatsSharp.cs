@@ -8,9 +8,9 @@ namespace Substrate.Integration.Model
     public class PlayStatsSharp
     {
         /// <summary>
-        /// Wrapped PlayStats constructor
+        /// PlayStatsSharp constructor
         /// </summary>
-        /// <param name="mint"></param>
+        /// <param name="playStats"></param>
         public PlayStatsSharp(PlayStats playStats)
         {
             First = playStats.First.Value;

@@ -15,16 +15,22 @@ namespace Substrate.Integration.Model
         {
             StorageTier = playerSeasonConfig.StorageTier.Value;
             StatsSharp = new StatsSharp(playerSeasonConfig.Stats);
+            LocksSharp = new LocksSharp(playerSeasonConfig.Locks);
         }
 
         /// <summary>
         /// Storage Tier
         /// </summary>
-        public StorageTier StorageTier { get; private set; }
+        public StorageTier StorageTier { get; }
 
         /// <summary>
         /// Stats
         /// </summary>
-        public StatsSharp StatsSharp { get; private set; }
+        public StatsSharp StatsSharp { get; }
+
+        /// <summary>
+        /// Locks
+        /// </summary>
+        public LocksSharp LocksSharp { get; }
     }
 }

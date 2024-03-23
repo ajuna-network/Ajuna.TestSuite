@@ -18,7 +18,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_message_queue
     
     
     /// <summary>
-    /// >> 524 - Composite[pallet_message_queue.Page]
+    /// >> 526 - Composite[pallet_message_queue.Page]
     /// </summary>
     [SubstrateNodeType(TypeDefEnum.Composite)]
     public sealed class Page : BaseType

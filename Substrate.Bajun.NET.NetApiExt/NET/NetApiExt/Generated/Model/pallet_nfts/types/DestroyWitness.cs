@@ -18,7 +18,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_nfts.types
     
     
     /// <summary>
-    /// >> 402 - Composite[pallet_nfts.types.DestroyWitness]
+    /// >> 404 - Composite[pallet_nfts.types.DestroyWitness]
     /// </summary>
     [SubstrateNodeType(TypeDefEnum.Composite)]
     public sealed class DestroyWitness : BaseType

@@ -18,7 +18,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.cumulus_pallet_parachain
     
     
     /// <summary>
-    /// >> 225 - Composite[cumulus_pallet_parachain_system.unincluded_segment.SegmentTracker]
+    /// >> 227 - Composite[cumulus_pallet_parachain_system.unincluded_segment.SegmentTracker]
     /// </summary>
     [SubstrateNodeType(TypeDefEnum.Composite)]
     public sealed class SegmentTracker : BaseType

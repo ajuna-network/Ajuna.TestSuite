@@ -18,7 +18,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_balances.types
     
     
     /// <summary>
-    /// >> 469 - Composite[pallet_balances.types.IdAmountT2]
+    /// >> 471 - Composite[pallet_balances.types.IdAmountT2]
     /// </summary>
     [SubstrateNodeType(TypeDefEnum.Composite)]
     public sealed class IdAmountT2 : BaseType

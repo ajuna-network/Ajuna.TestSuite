@@ -18,7 +18,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_nfts.types
     
     
     /// <summary>
-    /// >> 395 - Composite[pallet_nfts.types.BitFlagsT1]
+    /// >> 397 - Composite[pallet_nfts.types.BitFlagsT1]
     /// </summary>
     [SubstrateNodeType(TypeDefEnum.Composite)]
     public sealed class BitFlagsT1 : BaseType

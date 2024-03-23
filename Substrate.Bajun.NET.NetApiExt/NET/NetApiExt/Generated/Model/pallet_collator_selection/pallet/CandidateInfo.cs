@@ -18,7 +18,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_collator_selectio
     
     
     /// <summary>
-    /// >> 477 - Composite[pallet_collator_selection.pallet.CandidateInfo]
+    /// >> 479 - Composite[pallet_collator_selection.pallet.CandidateInfo]
     /// </summary>
     [SubstrateNodeType(TypeDefEnum.Composite)]
     public sealed class CandidateInfo : BaseType

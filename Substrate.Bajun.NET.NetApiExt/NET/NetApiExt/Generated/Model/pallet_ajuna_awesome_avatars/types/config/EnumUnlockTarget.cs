@@ -16,9 +16,9 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_awesome_ava
     
     
     /// <summary>
-    /// >> AffiliatorTarget
+    /// >> UnlockTarget
     /// </summary>
-    public enum AffiliatorTarget
+    public enum UnlockTarget
     {
         
         /// <summary>
@@ -38,9 +38,9 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_awesome_ava
     }
     
     /// <summary>
-    /// >> 391 - Variant[pallet_ajuna_awesome_avatars.types.config.AffiliatorTarget]
+    /// >> 393 - Variant[pallet_ajuna_awesome_avatars.types.config.UnlockTarget]
     /// </summary>
-    public sealed class EnumAffiliatorTarget : BaseEnumExt<AffiliatorTarget, BaseVoid, BaseVoid, Substrate.Bajun.NET.NetApiExt.Generated.Model.sp_core.crypto.AccountId32>
+    public sealed class EnumUnlockTarget : BaseEnumExt<UnlockTarget, BaseVoid, BaseVoid, Substrate.Bajun.NET.NetApiExt.Generated.Model.sp_core.crypto.AccountId32>
     {
     }
 }
