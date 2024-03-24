@@ -33,7 +33,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_nft_transfe
     }
     
     /// <summary>
-    /// >> 604 - Variant[pallet_ajuna_nft_transfer.pallet.NftStatus]
+    /// >> 611 - Variant[pallet_ajuna_nft_transfer.pallet.NftStatus]
     /// </summary>
     public sealed class EnumNftStatus : BaseEnum<NftStatus>
     {

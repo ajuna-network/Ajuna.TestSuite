@@ -18,7 +18,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_identity.legacy
     
     
     /// <summary>
-    /// >> 277 - Composite[pallet_identity.legacy.IdentityInfo]
+    /// >> 278 - Composite[pallet_identity.legacy.IdentityInfo]
     /// </summary>
     [SubstrateNodeType(TypeDefEnum.Composite)]
     public sealed class IdentityInfo : BaseType

@@ -10,7 +10,7 @@ namespace Substrate.NetApi.TestNode
 {
     public abstract class NodeTest
     {
-        protected const string WebSocketUrl = "ws://127.0.0.1:32865";
+        protected const string WebSocketUrl = "ws://127.0.0.1:34235";
 
         protected SubstrateNetwork _client;
 

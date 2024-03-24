@@ -23,62 +23,56 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_affiliates.
     {
         
         /// <summary>
-        /// >> OrganizerNotSet
-        /// There is no account set as the organizer
-        /// </summary>
-        OrganizerNotSet = 0,
-        
-        /// <summary>
         /// >> CannotAffiliateSelf
         /// An account cannot affiliate itself
         /// </summary>
-        CannotAffiliateSelf = 1,
+        CannotAffiliateSelf = 0,
         
         /// <summary>
         /// >> TargetAccountIsNotAffiliatable
         /// The account is not allowed to receive affiliates
         /// </summary>
-        TargetAccountIsNotAffiliatable = 2,
+        TargetAccountIsNotAffiliatable = 1,
         
         /// <summary>
         /// >> CannotAffiliateMoreAccounts
         /// This account has reached the affiliate limit
         /// </summary>
-        CannotAffiliateMoreAccounts = 3,
+        CannotAffiliateMoreAccounts = 2,
         
         /// <summary>
         /// >> CannotAffiliateAlreadyAffiliatedAccount
         /// This account has already been affiliated by another affiliator
         /// </summary>
-        CannotAffiliateAlreadyAffiliatedAccount = 4,
+        CannotAffiliateAlreadyAffiliatedAccount = 3,
         
         /// <summary>
         /// >> CannotAffiliateToExistingAffiliator
         /// This account is already an affiliator, so it cannot affiliate to another account
         /// </summary>
-        CannotAffiliateToExistingAffiliator = 5,
+        CannotAffiliateToExistingAffiliator = 4,
         
         /// <summary>
         /// >> CannotAffiliateBlocked
         /// The account is blocked, so it cannot be affiliated to
         /// </summary>
-        CannotAffiliateBlocked = 6,
+        CannotAffiliateBlocked = 5,
         
         /// <summary>
         /// >> ExtrinsicAlreadyHasRule
         /// The given extrinsic identifier is already paired with an affiliate rule
         /// </summary>
-        ExtrinsicAlreadyHasRule = 7,
+        ExtrinsicAlreadyHasRule = 6,
         
         /// <summary>
         /// >> ExtrinsicHasNoRule
         /// The given extrinsic identifier is not associated with any rule
         /// </summary>
-        ExtrinsicHasNoRule = 8,
+        ExtrinsicHasNoRule = 7,
     }
     
     /// <summary>
-    /// >> 609 - Variant[pallet_ajuna_affiliates.pallet.Error]
+    /// >> 616 - Variant[pallet_ajuna_affiliates.pallet.Error]
     /// The `Error` enum of this pallet.
     /// </summary>
     public sealed class EnumError : BaseEnum<Error>

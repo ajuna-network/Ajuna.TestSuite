@@ -67,7 +67,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_nft_transfe
     }
     
     /// <summary>
-    /// >> 605 - Variant[pallet_ajuna_nft_transfer.pallet.Error]
+    /// >> 612 - Variant[pallet_ajuna_nft_transfer.pallet.Error]
     /// The `Error` enum of this pallet.
     /// </summary>
     public sealed class EnumError : BaseEnum<Error>

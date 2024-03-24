@@ -18,7 +18,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.frame_support.traits.tok
     
     
     /// <summary>
-    /// >> 452 - Composite[frame_support.traits.tokens.fungible.HoldConsideration]
+    /// >> 459 - Composite[frame_support.traits.tokens.fungible.HoldConsideration]
     /// </summary>
     [SubstrateNodeType(TypeDefEnum.Composite)]
     public sealed class HoldConsideration : BaseType

@@ -226,7 +226,7 @@ namespace Substrate.Integration.Client
                 ExtrinsicManager.UpdateExtrinsicInfo(subscriptionId, extrinsicUpdate);
 
                 // proccessing events scrapping
-                if (ExtrinsicManager.TryGet(subscriptionId, out ExtrinsicInfo queueInfo) && !queueInfo.HasEvents && extrinsicUpdate.Hash != null && extrinsicUpdate.Index != null)
+                if (ExtrinsicManager.TryGet(subscriptionId, out ExtrinsicInfo extrinsicInfo) && !extrinsicInfo.HasEvents && extrinsicUpdate.Hash != null && extrinsicUpdate.Index != null)
                 {
                     string parameters = SystemStorage.EventsParams();
 

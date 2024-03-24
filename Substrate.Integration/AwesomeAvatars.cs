@@ -4,19 +4,23 @@ using Substrate.Bajun.NET.NetApiExt.Generated.Model.bounded_collections.bounded_
 using Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_awesome_avatars.pallet;
 using Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_awesome_avatars.types.affiliates;
 using Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_awesome_avatars.types.avatar;
+using Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_awesome_avatars.types.avatar.tournament;
 using Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_awesome_avatars.types.config;
 using Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_awesome_avatars.types.season;
+using Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_tournament.config;
 using Substrate.Bajun.NET.NetApiExt.Generated.Model.primitive_types;
 using Substrate.Bajun.NET.NetApiExt.Generated.Model.sp_core.crypto;
 using Substrate.Bajun.NET.NetApiExt.Generated.Storage;
 using Substrate.Integration.Client;
 using Substrate.Integration.Helper;
 using Substrate.Integration.Model;
+using Substrate.NetApi;
 using Substrate.NetApi.Extensions;
 using Substrate.NetApi.Model.Types;
 using Substrate.NetApi.Model.Types.Base;
 using Substrate.NetApi.Model.Types.Primitive;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Threading;
@@ -1285,6 +1289,76 @@ namespace Substrate.Integration
             }
 
             var extrinsic = AwesomeAvatarsCalls.SetUnlockConfig(seasonId, unlockConfigs);
+
+            return await GenericExtrinsicAsync(account, extrinsicType, extrinsic, concurrentTasks, token);
+        }
+
+        /// <summary>
+        /// Create a tournament
+        /// </summary>
+        /// <param name="account"></param>
+        /// <param name="seasonId"></param>
+        /// <param name="tournamentConfig"></param>
+        /// <param name="ranker"></param>
+        /// <param name="concurrentTasks"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public async Task<string?> CreateTournamentAsync(Account account, U16 seasonId, TournamentConfig tournamentConfig, AvatarRanker ranker, int concurrentTasks, CancellationToken token)
+        {
+            var extrinsicType = "AwesomeAvatarsCalls.CreateTournament";
+
+            if (!IsConnected || account == null)
+            {
+                return null;
+            }
+
+            var extrinsic = AwesomeAvatarsCalls.CreateTournament(seasonId, tournamentConfig, ranker);
+
+            return await GenericExtrinsicAsync(account, extrinsicType, extrinsic, concurrentTasks, token);
+        }
+
+        /// <summary>
+        /// Claim the tournament reward
+        /// </summary>
+        /// <param name="account"></param>
+        /// <param name="seasonId"></param>
+        /// <param name="avatarId"></param>
+        /// <param name="concurrentTasks"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public async Task<string?> ClaimTournamentRewardForAsync(Account account, U16 seasonId, H256 avatarId, int concurrentTasks, CancellationToken token)
+        {
+            var extrinsicType = "AwesomeAvatarsCalls.ClaimTournamentRewardFor";
+
+            if (!IsConnected || account == null)
+            {
+                return null;
+            }
+
+            var extrinsic = AwesomeAvatarsCalls.ClaimTournamentRewardFor(seasonId, avatarId);
+
+            return await GenericExtrinsicAsync(account, extrinsicType, extrinsic, concurrentTasks, token);
+        }
+
+        /// <summary>
+        /// Claim the golden duck
+        /// </summary>
+        /// <param name="account"></param>
+        /// <param name="seasonId"></param>
+        /// <param name="avatarId"></param>
+        /// <param name="concurrentTasks"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public async Task<string?> ClaimGoldenDuckForAsync(Account account, U16 seasonId, H256 avatarId, int concurrentTasks, CancellationToken token)
+        {
+            var extrinsicType = "AwesomeAvatarsCalls.ClaimGoldenDuckFor";
+
+            if (!IsConnected || account == null)
+            {
+                return null;
+            }
+
+            var extrinsic = AwesomeAvatarsCalls.ClaimGoldenDuckFor(seasonId, avatarId);
 
             return await GenericExtrinsicAsync(account, extrinsicType, extrinsic, concurrentTasks, token);
         }

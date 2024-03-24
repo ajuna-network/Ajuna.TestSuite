@@ -38,7 +38,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_affiliates.
     }
     
     /// <summary>
-    /// >> 608 - Variant[pallet_ajuna_affiliates.traits.AffiliatableStatus]
+    /// >> 615 - Variant[pallet_ajuna_affiliates.traits.AffiliatableStatus]
     /// </summary>
     public sealed class EnumAffiliatableStatus : BaseEnum<AffiliatableStatus>
     {

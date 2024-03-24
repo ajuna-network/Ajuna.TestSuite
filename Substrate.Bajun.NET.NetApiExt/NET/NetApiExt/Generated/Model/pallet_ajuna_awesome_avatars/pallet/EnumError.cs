@@ -464,7 +464,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_awesome_ava
     }
     
     /// <summary>
-    /// >> 578 - Variant[pallet_ajuna_awesome_avatars.pallet.Error]
+    /// >> 585 - Variant[pallet_ajuna_awesome_avatars.pallet.Error]
     /// The `Error` enum of this pallet.
     /// </summary>
     public sealed class EnumError : BaseEnum<Error>

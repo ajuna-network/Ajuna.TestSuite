@@ -13,6 +13,9 @@ using System.Text;
 
 namespace Substrate.Integration.Helper
 {
+    /// <summary>
+    /// Generic helper functions
+    /// </summary>
     public static class Generic
     {
         /// <summary>

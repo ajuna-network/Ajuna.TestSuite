@@ -37,7 +37,7 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Storage
         {
             this._client = client;
             _client.StorageKeyDict.Add(new System.Tuple<string, string>("AffiliatesAAA", "Affiliatees"), new System.Tuple<Substrate.NetApi.Model.Meta.Storage.Hasher[], System.Type, System.Type>(new Substrate.NetApi.Model.Meta.Storage.Hasher[] {
-                            Substrate.NetApi.Model.Meta.Storage.Hasher.Identity}, typeof(Substrate.Bajun.NET.NetApiExt.Generated.Model.sp_core.crypto.AccountId32), typeof(Substrate.Bajun.NET.NetApiExt.Generated.Model.bounded_collections.bounded_vec.BoundedVecT49)));
+                            Substrate.NetApi.Model.Meta.Storage.Hasher.Identity}, typeof(Substrate.Bajun.NET.NetApiExt.Generated.Model.sp_core.crypto.AccountId32), typeof(Substrate.Bajun.NET.NetApiExt.Generated.Model.bounded_collections.bounded_vec.BoundedVecT50)));
             _client.StorageKeyDict.Add(new System.Tuple<string, string>("AffiliatesAAA", "Affiliators"), new System.Tuple<Substrate.NetApi.Model.Meta.Storage.Hasher[], System.Type, System.Type>(new Substrate.NetApi.Model.Meta.Storage.Hasher[] {
                             Substrate.NetApi.Model.Meta.Storage.Hasher.Identity}, typeof(Substrate.Bajun.NET.NetApiExt.Generated.Model.sp_core.crypto.AccountId32), typeof(Substrate.Bajun.NET.NetApiExt.Generated.Model.pallet_ajuna_affiliates.traits.AffiliatorState)));
             _client.StorageKeyDict.Add(new System.Tuple<string, string>("AffiliatesAAA", "AffiliateRules"), new System.Tuple<Substrate.NetApi.Model.Meta.Storage.Hasher[], System.Type, System.Type>(new Substrate.NetApi.Model.Meta.Storage.Hasher[] {
@@ -71,10 +71,10 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Storage
         /// >> Affiliatees
         ///  Stores the affiliated accounts from the perspectives of the affiliatee
         /// </summary>
-        public async Task<Substrate.Bajun.NET.NetApiExt.Generated.Model.bounded_collections.bounded_vec.BoundedVecT49> Affiliatees(Substrate.Bajun.NET.NetApiExt.Generated.Model.sp_core.crypto.AccountId32 key, string blockhash, CancellationToken token)
+        public async Task<Substrate.Bajun.NET.NetApiExt.Generated.Model.bounded_collections.bounded_vec.BoundedVecT50> Affiliatees(Substrate.Bajun.NET.NetApiExt.Generated.Model.sp_core.crypto.AccountId32 key, string blockhash, CancellationToken token)
         {
             string parameters = AffiliatesAAAStorage.AffiliateesParams(key);
-            var result = await _client.GetStorageAsync<Substrate.Bajun.NET.NetApiExt.Generated.Model.bounded_collections.bounded_vec.BoundedVecT49>(parameters, blockhash, token);
+            var result = await _client.GetStorageAsync<Substrate.Bajun.NET.NetApiExt.Generated.Model.bounded_collections.bounded_vec.BoundedVecT50>(parameters, blockhash, token);
             return result;
         }
         
@@ -229,12 +229,6 @@ namespace Substrate.Bajun.NET.NetApiExt.Generated.Storage
     /// </summary>
     public enum AffiliatesAAAErrors
     {
-        
-        /// <summary>
-        /// >> OrganizerNotSet
-        /// There is no account set as the organizer
-        /// </summary>
-        OrganizerNotSet,
         
         /// <summary>
         /// >> CannotAffiliateSelf

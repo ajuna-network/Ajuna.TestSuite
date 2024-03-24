@@ -463,24 +463,37 @@ namespace Substrate.Integration
         #region extrinsics
 
         /// <summary>
-        /// Remark
+        /// Remarks
         /// </summary>
         /// <param name="remark"></param>
         /// <param name="concurrentTasks"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task<string> RemarksAsync(BaseVec<U8> remark, int concurrentTasks, CancellationToken token)
+        public async Task<string?> RemarksAsync(BaseVec<U8> remark, int concurrentTasks, CancellationToken token)
+        {
+            return await RemarksAsync(Account, remark, concurrentTasks, token);
+        }
+
+        /// <summary>
+        /// Remarks
+        /// </summary>
+        /// <param name="account"></param>
+        /// <param name="remark"></param>
+        /// <param name="concurrentTasks"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public async Task<string?> RemarksAsync(Account account, BaseVec<U8> remark, int concurrentTasks, CancellationToken token)
         {
             var extrinsicType = "SystemCalls.Remark";
 
-            if (!IsConnected || Account == null)
+            if (!IsConnected || account == null)
             {
                 return null;
             }
 
             var extrinsic = SystemCalls.Remark(remark);
 
-            return await GenericExtrinsicAsync(Account, extrinsicType, extrinsic, concurrentTasks, token);
+            return await GenericExtrinsicAsync(account, extrinsicType, extrinsic, concurrentTasks, token);
         }
 
         /// <summary>
@@ -488,9 +501,10 @@ namespace Substrate.Integration
         /// </summary>
         /// <param name="dest"></param>
         /// <param name="value"></param>
+        /// <param name="concurrentTasks"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task<string> TransferKeepAliveAsync(AccountId32 dest, BigInteger value, int concurrentTasks, CancellationToken token)
+        public async Task<string?> TransferKeepAliveAsync(AccountId32 dest, BigInteger value, int concurrentTasks, CancellationToken token)
         {
             return await TransferKeepAliveAsync(Account, dest, value, concurrentTasks, token);
         }
@@ -504,7 +518,7 @@ namespace Substrate.Integration
         /// <param name="concurrentTasks"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task<string> TransferKeepAliveAsync(Account account, AccountId32 dest, BigInteger value, int concurrentTasks, CancellationToken token)
+        public async Task<string?> TransferKeepAliveAsync(Account account, AccountId32 dest, BigInteger value, int concurrentTasks, CancellationToken token)
         {
             var extrinsicType = "BalancesCalls.TransferKeepAlive";
 
@@ -531,7 +545,7 @@ namespace Substrate.Integration
         /// <param name="concurrentTasks"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task<string> BatchAllAsync(List<EnumRuntimeCall> callList, int concurrentTasks, CancellationToken token)
+        public async Task<string?> BatchAllAsync(List<EnumRuntimeCall> callList, int concurrentTasks, CancellationToken token)
         {
             return await BatchAllAsync(Account, callList, concurrentTasks, token);
         }
@@ -544,7 +558,7 @@ namespace Substrate.Integration
         /// <param name="concurrentTasks"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task<string> BatchAllAsync(Account account, List<EnumRuntimeCall> callList, int concurrentTasks, CancellationToken token)
+        public async Task<string?> BatchAllAsync(Account account, List<EnumRuntimeCall> callList, int concurrentTasks, CancellationToken token)
         {
             var extrinsicType = "UtilityCalls.BatchAll";
 
@@ -564,11 +578,12 @@ namespace Substrate.Integration
         /// <summary>
         /// Submit a sudo extrinsic.
         /// </summary>
+        /// <param name="sudoAccount"></param>
         /// <param name="call"></param>
         /// <param name="concurrentTasks"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task<string> SudoAsync(Account sudoAccount, EnumRuntimeCall call, int concurrentTasks, CancellationToken token)
+        public async Task<string?> SudoAsync(Account sudoAccount, EnumRuntimeCall call, int concurrentTasks, CancellationToken token)
         {
             var extrinsicType = "Sudo.Sudo";
 
